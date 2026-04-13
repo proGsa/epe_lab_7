@@ -1,7 +1,20 @@
 # Цветков Иван ИУ7-83Б, 2023г
 # https://github.com/amunra2
 
-from PyQt5.QtWidgets import QMainWindow, QHeaderView, QTableWidgetItem, QMessageBox
+from PyQt5.QtWidgets import (
+    QMainWindow,
+    QHeaderView,
+    QTableWidgetItem,
+    QMessageBox,
+    QTabWidget,
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QGroupBox,
+    QLabel,
+    QComboBox,
+    QSpinBox,
+)
 import matplotlib.pyplot as plt
 
 from gui.gui import Ui_MainWindow
@@ -14,6 +27,8 @@ class Window(QMainWindow):
         super(Window, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.setupCocomoModelTabs()
+        self.setupArchitectureLocInput()
         self.setupEarlyArchitectureFactorValues()
         self.resizeTables()
 
@@ -24,6 +39,90 @@ class Window(QMainWindow):
         self.ui.resultFuncDotBtn.clicked.connect(self.funcDotsMethod)
         self.ui.resultCompositionBtn.clicked.connect(self.appCompositionCocomo2)
         self.ui.resultArchitectureBtn.clicked.connect(self.earlyArchitectureCocomo2)
+
+
+    def setupCocomoModelTabs(self):
+        self.cocomoModelTabs = QTabWidget(self.ui.cocomo2)
+        compositionTab = QWidget()
+        architectureTab = QWidget()
+
+        compositionLayout = QVBoxLayout(compositionTab)
+        self.ui.groupBox_5.setParent(compositionTab)
+        self.ui.groupBox_6.setParent(compositionTab)
+        compositionLayout.addWidget(self.ui.groupBox_5)
+        compositionLayout.addWidget(self.ui.groupBox_6)
+
+        architectureLayout = QVBoxLayout(architectureTab)
+        self.architectureFactorsGroup, self.architectureFactorComboboxes = self.createArchitectureFactorsGroup()
+        self.ui.groupBox_7.setParent(architectureTab)
+        architectureLayout.addWidget(self.architectureFactorsGroup)
+        architectureLayout.addWidget(self.ui.groupBox_7)
+
+        self.clearLayout(self.ui.horizontalLayout_41)
+        self.ui.horizontalLayout_41.addWidget(self.cocomoModelTabs)
+
+        self.cocomoModelTabs.addTab(compositionTab, "COCOMO II (Композиция приложения)")
+        self.cocomoModelTabs.addTab(architectureTab, "COCOMO II (ранняя разработка архитектуры)")
+
+
+    def createArchitectureFactorsGroup(self):
+        factorSources = [
+            self.ui.factorSelectPREC,
+            self.ui.factorSelectFLEX,
+            self.ui.factorSelectRESL,
+            self.ui.factorSelectTEAM,
+            self.ui.factorSelectPMAT,
+        ]
+        factorLabels = ["PREC", "FLEX", "RESL", "TEAM", "PMAT"]
+
+        group = QGroupBox("Факторы показателя степени модели", self.ui.cocomo2)
+        groupLayout = QVBoxLayout(group)
+        comboboxes = []
+
+        for labelText, source in zip(factorLabels, factorSources):
+            rowLayout = QHBoxLayout()
+            label = QLabel(labelText, group)
+            combobox = QComboBox(group)
+
+            for i in range(source.count()):
+                combobox.addItem(source.itemText(i))
+            combobox.setCurrentIndex(source.currentIndex())
+
+            rowLayout.addWidget(label)
+            rowLayout.addWidget(combobox)
+            rowLayout.setStretch(0, 1)
+            rowLayout.setStretch(1, 5)
+            groupLayout.addLayout(rowLayout)
+            comboboxes.append(combobox)
+
+        return group, comboboxes
+
+
+    def clearLayout(self, layout):
+        while layout.count():
+            item = layout.takeAt(0)
+            childLayout = item.layout()
+            childWidget = item.widget()
+            if childLayout is not None:
+                self.clearLayout(childLayout)
+            if childWidget is not None:
+                childWidget.setParent(None)
+
+
+    def setupArchitectureLocInput(self):
+        locLayout = QHBoxLayout()
+        locLabel = QLabel("LOC", self.ui.groupBox_7)
+        self.locArchitectureInput = QSpinBox(self.ui.groupBox_7)
+        self.locArchitectureInput.setMaximum(99999999)
+        self.locArchitectureInput.setValue(0)
+
+        locLayout.addWidget(locLabel)
+        locLayout.addWidget(self.locArchitectureInput)
+        locLayout.setStretch(0, 1)
+        locLayout.setStretch(1, 1)
+
+        insertIndex = max(self.ui.verticalLayout_16.count() - 1, 0)
+        self.ui.verticalLayout_16.insertLayout(insertIndex, locLayout)
 
 
     def setupEarlyArchitectureFactorValues(self):
@@ -52,8 +151,9 @@ class Window(QMainWindow):
 
     def earlyArchitectureCocomo2(self):
         # 1. Get data
-        if (self.loc is None): 
-            QMessageBox.warning(self, "Ошибка", "Количество строк кода пока неизвестно")
+        loc = self.locArchitectureInput.value()
+        if loc <= 0:
+            QMessageBox.warning(self, "Ошибка", "Введите LOC больше 0")
             return
         
         parametersDict = {
@@ -64,12 +164,8 @@ class Window(QMainWindow):
                             self.ui.modelSelectPREX.currentIndex(),
                             self.ui.modelSelectFSIL.currentIndex(),
                             self.ui.modelSelectSCED.currentIndex(),],
-            "FACTORS"    : [self.ui.factorSelectPREC.currentIndex(),
-                            self.ui.factorSelectFLEX.currentIndex(),
-                            self.ui.factorSelectRESL.currentIndex(),
-                            self.ui.factorSelectTEAM.currentIndex(),
-                            self.ui.factorSelectPMAT.currentIndex(),],
-            "LOC"        : self.loc,
+            "FACTORS"    : [combobox.currentIndex() for combobox in self.architectureFactorComboboxes],
+            "LOC"        : loc,
         }
 
         salary = self.ui.avgSalaryArchitectureInput.value()
@@ -132,6 +228,7 @@ class Window(QMainWindow):
         afp = adjust_fp(fp[-1], productAttributes)
         loc = get_loc_by_fp(afp, languagePercents)
         self.loc = loc
+        self.locArchitectureInput.setValue(loc)
 
         print(f"4. fp = {fp}; afp = {afp}; loc = {loc}")
 
