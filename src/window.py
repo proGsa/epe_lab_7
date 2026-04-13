@@ -14,6 +14,7 @@ class Window(QMainWindow):
         super(Window, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.setupEarlyArchitectureFactorValues()
         self.resizeTables()
 
         # Data
@@ -23,6 +24,28 @@ class Window(QMainWindow):
         self.ui.resultFuncDotBtn.clicked.connect(self.funcDotsMethod)
         self.ui.resultCompositionBtn.clicked.connect(self.appCompositionCocomo2)
         self.ui.resultArchitectureBtn.clicked.connect(self.earlyArchitectureCocomo2)
+
+
+    def setupEarlyArchitectureFactorValues(self):
+        multiplier_values = {
+            self.ui.modelSelectPERS: [1.62, 1.26, 1.00, 0.83, 0.63, 0.50],
+            self.ui.modelSelectRCPX: [0.60, 0.83, 1.00, 1.33, 1.91, 2.72],
+            self.ui.modelSelectRUSE: [0.95, 1.00, 1.07, 1.15, 1.24],
+            self.ui.modelSelectPDIF: [0.87, 1.00, 1.29, 1.81, 2.61],
+            self.ui.modelSelectPREX: [1.33, 1.22, 1.00, 0.87, 0.74, 0.62],
+            self.ui.modelSelectFSIL: [1.30, 1.10, 1.00, 0.87, 0.73, 0.62],
+            self.ui.modelSelectSCED: [1.43, 1.14, 1.00, 1.00, 1.00],
+        }
+
+        for combobox, values in multiplier_values.items():
+            for i, value in enumerate(values):
+                level = combobox.itemText(i)
+                combobox.setItemText(i, f"{level} ({self.formatFactorValue(value)})")
+
+
+    def formatFactorValue(self, value: float) -> str:
+        formatted = f"{value:.2f}".rstrip("0").rstrip(".")
+        return formatted if "." in formatted else f"{formatted}.0"
 
 
     def earlyArchitectureCocomo2(self):
