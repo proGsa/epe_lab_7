@@ -13,9 +13,9 @@ COEFS = np.array([
     ])
 
 LANGUAGES = np.array([320, 128, 106, 106,
-                      90, 64, 53, 53,
+                      90, 53, 53, 53,
                       49, 32, 34, 18,
-                      21, 54, 13, 56 ])
+                      21, 54, 21, 56 ])
 
 def calculate_fp(func_types_matrix: list[list[int]]) -> tuple[list[int], int]:
     func_types_matrix = np.array(func_types_matrix)
