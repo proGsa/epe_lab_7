@@ -1,6 +1,3 @@
-# Хамзина Регина ИУ7-83Б, 2023г
-# https://github.com/hamzreg
-
 from dataclasses import dataclass
 from math import prod
 
@@ -100,7 +97,7 @@ def early_architecture(salary: float, parameters: dict):
     factors = get_factors(parameters['FACTORS'])
     p = get_p(factors)
 
-    work = 2.45 * earch * parameters['LOC'] / 1000 ** p
+    work = 2.94 * earch * (parameters['LOC'] / 1000)**p # KILOLOC
     time = get_time(work, p)
     budget = salary * work
 
