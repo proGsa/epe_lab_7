@@ -27,7 +27,7 @@ FACTORS = {
     'FLEX': [5.07, 4.05, 3.04, 2.03, 1.01, 0],
     'RESL': [7.00, 5.65, 4.24, 2.83, 1.41, 0],
     'TEAM': [5.48, 4.38, 3.29, 2.19, 1.10, 0],
-    'PMAT': [7.00, 6.24, 4.68, 1.12, 1.56, 0]
+    'PMAT': [7.80, 6.24, 4.68, 3.12, 1.56, 0]
 }
 
 PROD = [4, 7, 13, 25, 50]
@@ -57,8 +57,8 @@ def get_p(factors: list):
     return sum(factors) / 100 + 1.01
 
 def get_time(work: float, p: float):
-    power = 0.33 + 0.2 * (p - 1.01)
-    return 3 * work ** power
+    power = 0.28 + 0.2 * (p - 1.01)
+    return 3.67 * work ** power
 
 
 def app_composition(salary: float, parameters: dict):
