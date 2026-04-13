@@ -1,6 +1,3 @@
-# Цветков Иван ИУ7-83Б, 2023г
-# https://github.com/amunra2
-
 from PyQt5.QtWidgets import (
     QMainWindow,
     QHeaderView,
@@ -114,7 +111,7 @@ class Window(QMainWindow):
         locLabel = QLabel("LOC", self.ui.groupBox_7)
         self.locArchitectureInput = QSpinBox(self.ui.groupBox_7)
         self.locArchitectureInput.setMaximum(99999999)
-        self.locArchitectureInput.setValue(2929)
+        self.locArchitectureInput.setValue(2731)
 
         locLayout.addWidget(locLabel)
         locLayout.addWidget(self.locArchitectureInput)

@@ -69,8 +69,7 @@ def app_composition(salary: float, parameters: dict):
     
     work = nop / PROD[parameters['PROD']]
     time = get_time(work, p)
-    budget = salary * work
-
+    budget = salary * round(work, 2)
     return {'P': p,
             'WORK': round(work, 2), 
             'TIME': round(time, 2), 
@@ -99,7 +98,7 @@ def early_architecture(salary: float, parameters: dict):
 
     work = 2.94 * earch * (parameters['LOC'] / 1000)**p # KILOLOC
     time = get_time(work, p)
-    budget = salary * work
+    budget = salary * round(work, 2)
 
     return {'P': p,
             'WORK': round(work, 2), 

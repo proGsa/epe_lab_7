@@ -1,5 +1,3 @@
-# EqualNine, 2023г
-
 import sys
 from PyQt5.QtWidgets import QApplication
 
