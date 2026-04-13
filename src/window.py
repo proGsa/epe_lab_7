@@ -28,16 +28,18 @@ class Window(QMainWindow):
 
     def setupEarlyArchitectureFactorValues(self):
         multiplier_values = {
-            self.ui.modelSelectPERS: [1.62, 1.26, 1.00, 0.83, 0.63, 0.50],
-            self.ui.modelSelectRCPX: [0.60, 0.83, 1.00, 1.33, 1.91, 2.72],
+            self.ui.modelSelectPERS: [2.12, 1.62, 1.26, 1.00, 0.83, 0.63, 0.50],
+            self.ui.modelSelectRCPX: [0.49, 0.60, 0.83, 1.00, 1.33, 1.91, 2.72],
             self.ui.modelSelectRUSE: [0.95, 1.00, 1.07, 1.15, 1.24],
             self.ui.modelSelectPDIF: [0.87, 1.00, 1.29, 1.81, 2.61],
-            self.ui.modelSelectPREX: [1.33, 1.22, 1.00, 0.87, 0.74, 0.62],
-            self.ui.modelSelectFSIL: [1.30, 1.10, 1.00, 0.87, 0.73, 0.62],
+            self.ui.modelSelectPREX: [1.59, 1.33, 1.22, 1.00, 0.87, 0.74, 0.62],
+            self.ui.modelSelectFSIL: [1.43, 1.30, 1.10, 1.00, 0.87, 0.73, 0.62],
             self.ui.modelSelectSCED: [1.43, 1.14, 1.00, 1.00, 1.00],
         }
 
         for combobox, values in multiplier_values.items():
+            if combobox.count() < len(values):
+                combobox.insertItem(0, "Сверхнизкий")
             for i, value in enumerate(values):
                 level = combobox.itemText(i)
                 combobox.setItemText(i, f"{level} ({self.formatFactorValue(value)})")
