@@ -213,15 +213,15 @@ class Window(QMainWindow):
     def funcDotsMethod(self):
         # 1. Get data
         productAttributes = self.getPoductAttributes()
-        print(f"1. productAttributes = {productAttributes}")
+        # print(f"1. productAttributes = {productAttributes}")
 
         languagePercents = self.getLanguagePercents()
-        print(f"2. languagePercents = {languagePercents}")
+        # print(f"2. languagePercents = {languagePercents}")
 
         funcDotsTableMatrix = self.getFuncDotsTableMatrix()
         if (funcDotsTableMatrix is None): return
-        print(f"3. funcTableMatrix = \n")
-        [print(row) for row in funcDotsTableMatrix]
+        # print(f"3. funcTableMatrix = \n")
+        # [print(row) for row in funcDotsTableMatrix]
 
         # 2. Calculate
         fp = calculate_fp(funcDotsTableMatrix)
@@ -230,7 +230,7 @@ class Window(QMainWindow):
         self.loc = loc
         self.locArchitectureInput.setValue(loc)
 
-        print(f"4. fp = {fp}; afp = {afp}; loc = {loc}")
+        # print(f"4. fp = {fp}; afp = {afp}; loc = {loc}")
 
         # 3. Show result
         self.ui.resultFuncDotsTable.setItem(0, 0, QTableWidgetItem(str(fp[1])))
