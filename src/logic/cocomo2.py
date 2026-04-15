@@ -51,6 +51,7 @@ def get_factors(indexes: list):
     return factors
 
 def get_p(factors: list):
+    print("factors: ", sum(factors))
     return sum(factors) / 100 + 1.01
 
 def get_time(work: float, p: float):
@@ -66,11 +67,11 @@ def app_composition(salary: float, parameters: dict):
     
     factors = get_factors(parameters['FACTORS'])
     p = get_p(factors)
-    
+    # print(f"p = {p:.2f}")
     work = nop / PROD[parameters['PROD']]
     time = get_time(work, p)
     budget = salary * round(work, 2)
-    return {'P': p,
+    return {'P': round(p, 2),
             'WORK': round(work, 2), 
             'TIME': round(time, 2), 
             'BUDGET': round(budget, 2),
@@ -93,15 +94,17 @@ def get_nop(forms: list, reports: list, modules: int, ruse: float):
 def early_architecture(salary: float, parameters: dict):
     multipliers = get_multipliers(parameters['MULTIPLIERS'])
     earch = prod(multipliers)
+    # print("earch = ", earch)
 
     factors = get_factors(parameters['FACTORS'])
     p = get_p(factors)
-
+    # print(f"early_arch p = {p:.2f}")
     work = 2.94 * earch * (parameters['LOC'] / 1000)**p # KILOLOC
     time = get_time(work, p)
     budget = salary * round(work, 2)
 
-    return {'P': p,
+    return {'P': round(p, 2),
+            'EARCH': round(earch, 2),
             'WORK': round(work, 2), 
             'TIME': round(time, 2), 
             'BUDGET': round(budget, 2)}

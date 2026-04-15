@@ -598,6 +598,16 @@
                         <string>Бюджет (руб)</string>
                        </property>
                       </column>
+                      <column>
+                       <property name="text">
+                        <string>NOP</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>P</string>
+                       </property>
+                      </column>
                      </widget>
                     </item>
                     <item>
@@ -1007,6 +1017,16 @@
                       <column>
                        <property name="text">
                         <string>Бюджет (руб)</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>P</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>EARCH</string>
                        </property>
                       </column>
                      </widget>

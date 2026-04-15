@@ -25,7 +25,6 @@ def calculate_fp(func_types_matrix: list[list[int]]) -> tuple[list[int], int]:
 
 def adjust_fp(fp: int, complexity_ratios: list[int]) -> float:
     vaf = 0.65 + 0.01 * sum(complexity_ratios)
-
     return fp * vaf
 
 def get_loc_by_fp(fp: float, language_percentage: list[float]) -> float:

@@ -174,6 +174,8 @@ class Window(QMainWindow):
         self.ui.resultArchitectureTable.setItem(0, 0, QTableWidgetItem(str(resultDict["WORK"])))
         self.ui.resultArchitectureTable.setItem(0, 1, QTableWidgetItem(str(resultDict["TIME"])))
         self.ui.resultArchitectureTable.setItem(0, 2, QTableWidgetItem(str(resultDict["BUDGET"])))
+        self.ui.resultArchitectureTable.setItem(0, 3, QTableWidgetItem(str(resultDict["P"])))
+        self.ui.resultArchitectureTable.setItem(0, 4, QTableWidgetItem(str(resultDict["EARCH"])))
 
 
 
@@ -205,8 +207,9 @@ class Window(QMainWindow):
         self.ui.resultCompositionTable.setItem(0, 0, QTableWidgetItem(str(resultDict["WORK"])))
         self.ui.resultCompositionTable.setItem(0, 1, QTableWidgetItem(str(resultDict["TIME"])))
         self.ui.resultCompositionTable.setItem(0, 2, QTableWidgetItem(str(resultDict["BUDGET"])))
-        # self.ui.resultCompositionTable.setItem(0, 3, QTableWidgetItem(str(resultDict["NOP"])))
-        print(f"NOP = {resultDict['NOP']}")
+        self.ui.resultCompositionTable.setItem(0, 3, QTableWidgetItem(str(int(resultDict["NOP"]))))
+        self.ui.resultCompositionTable.setItem(0, 4, QTableWidgetItem(str(resultDict["P"])))
+        # print(f"NOP = {resultDict['NOP']}")
         
 
     def funcDotsMethod(self):
