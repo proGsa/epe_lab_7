@@ -209,7 +209,6 @@ class Window(QMainWindow):
         print(f"NOP = {resultDict['NOP']}")
         
 
-
     def funcDotsMethod(self):
         # 1. Get data
         productAttributes = self.getPoductAttributes()

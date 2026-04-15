@@ -1361,7 +1361,7 @@ class Ui_MainWindow(object):
         item = self.funcDotsTable.item(3, 2)
         item.setText(_translate("MainWindow", "0"))
         item = self.funcDotsTable.item(4, 0)
-        item.setText(_translate("MainWindow", "0"))
+        item.setText(_translate("MainWindow", "1"))
         item = self.funcDotsTable.item(4, 1)
         item.setText(_translate("MainWindow", "0"))
         item = self.funcDotsTable.item(4, 2)
