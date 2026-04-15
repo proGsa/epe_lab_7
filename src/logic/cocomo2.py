@@ -73,7 +73,8 @@ def app_composition(salary: float, parameters: dict):
     return {'P': p,
             'WORK': round(work, 2), 
             'TIME': round(time, 2), 
-            'BUDGET': round(budget, 2)}
+            'BUDGET': round(budget, 2),
+            'NOP': round(nop, 2)}
 
 def get_nop(forms: list, reports: list, modules: int, ruse: float):
     object_points = (  forms[0] * FormComplexity.low

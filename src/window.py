@@ -205,6 +205,9 @@ class Window(QMainWindow):
         self.ui.resultCompositionTable.setItem(0, 0, QTableWidgetItem(str(resultDict["WORK"])))
         self.ui.resultCompositionTable.setItem(0, 1, QTableWidgetItem(str(resultDict["TIME"])))
         self.ui.resultCompositionTable.setItem(0, 2, QTableWidgetItem(str(resultDict["BUDGET"])))
+        # self.ui.resultCompositionTable.setItem(0, 3, QTableWidgetItem(str(resultDict["NOP"])))
+        print(f"NOP = {resultDict['NOP']}")
+        
 
 
     def funcDotsMethod(self):
