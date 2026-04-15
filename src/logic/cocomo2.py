@@ -1,6 +1,3 @@
-# Хамзина Регина ИУ7-83Б, 2023г
-# https://github.com/hamzreg
-
 from dataclasses import dataclass
 from math import prod
 
@@ -27,18 +24,18 @@ FACTORS = {
     'FLEX': [5.07, 4.05, 3.04, 2.03, 1.01, 0],
     'RESL': [7.00, 5.65, 4.24, 2.83, 1.41, 0],
     'TEAM': [5.48, 4.38, 3.29, 2.19, 1.10, 0],
-    'PMAT': [7.00, 6.24, 4.68, 1.12, 1.56, 0]
+    'PMAT': [7.80, 6.24, 4.68, 3.12, 1.56, 0]
 }
 
 PROD = [4, 7, 13, 25, 50]
 
 MULTIPLIERS = {
-    'PERS': [1.62, 1.26, 1.00, 0.83, 0.63, 0.50],
-    'RCPX': [0.60, 0.83, 1.00, 1.33, 1.91, 2.72],
+    'PERS': [2.12, 1.62, 1.26, 1.00, 0.83, 0.63, 0.50],
+    'RCPX': [0.49, 0.60, 0.83, 1.00, 1.33, 1.91, 2.72],
     'RUSE': [0.95, 1.00, 1.07, 1.15, 1.24],
     'PDIF': [0.87, 1.00, 1.29, 1.81, 2.61],
-    'PREX': [1.33, 1.22, 1.00, 0.87, 0.74, 0.62],
-    'FCIL': [1.30, 1.10, 1.00, 0.87, 0.73, 0.62],
+    'PREX': [1.59, 1.33, 1.22, 1.00, 0.87, 0.74, 0.62],
+    'FCIL': [1.43, 1.30, 1.10, 1.00, 0.87, 0.73, 0.62],
     'SCED': [1.43, 1.14, 1.00, 1.00, 1.00]
 }
 
@@ -57,8 +54,8 @@ def get_p(factors: list):
     return sum(factors) / 100 + 1.01
 
 def get_time(work: float, p: float):
-    power = 0.33 + 0.2 * (p - 1.01)
-    return 3 * work ** power
+    power = 0.28 + 0.2 * (p - 1.01)
+    return 3.67 * work ** power
 
 
 def app_composition(salary: float, parameters: dict):
@@ -72,12 +69,12 @@ def app_composition(salary: float, parameters: dict):
     
     work = nop / PROD[parameters['PROD']]
     time = get_time(work, p)
-    budget = salary * work
-
+    budget = salary * round(work, 2)
     return {'P': p,
             'WORK': round(work, 2), 
             'TIME': round(time, 2), 
-            'BUDGET': round(budget, 2)}
+            'BUDGET': round(budget, 2),
+            'NOP': round(nop, 2)}
 
 def get_nop(forms: list, reports: list, modules: int, ruse: float):
     object_points = (  forms[0] * FormComplexity.low
@@ -100,9 +97,9 @@ def early_architecture(salary: float, parameters: dict):
     factors = get_factors(parameters['FACTORS'])
     p = get_p(factors)
 
-    work = 2.45 * earch * parameters['LOC'] / 1000 ** p
+    work = 2.94 * earch * (parameters['LOC'] / 1000)**p # KILOLOC
     time = get_time(work, p)
-    budget = salary * work
+    budget = salary * round(work, 2)
 
     return {'P': p,
             'WORK': round(work, 2), 

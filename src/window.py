@@ -1,7 +1,17 @@
-# Цветков Иван ИУ7-83Б, 2023г
-# https://github.com/amunra2
-
-from PyQt5.QtWidgets import QMainWindow, QHeaderView, QTableWidgetItem, QMessageBox
+from PyQt5.QtWidgets import (
+    QMainWindow,
+    QHeaderView,
+    QTableWidgetItem,
+    QMessageBox,
+    QTabWidget,
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QGroupBox,
+    QLabel,
+    QComboBox,
+    QSpinBox,
+)
 import matplotlib.pyplot as plt
 
 from gui.gui import Ui_MainWindow
@@ -14,6 +24,9 @@ class Window(QMainWindow):
         super(Window, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.setupCocomoModelTabs()
+        self.setupArchitectureLocInput()
+        self.setupEarlyArchitectureFactorValues()
         self.resizeTables()
 
         # Data
@@ -25,10 +38,119 @@ class Window(QMainWindow):
         self.ui.resultArchitectureBtn.clicked.connect(self.earlyArchitectureCocomo2)
 
 
+    def setupCocomoModelTabs(self):
+        self.cocomoModelTabs = QTabWidget(self.ui.cocomo2)
+        compositionTab = QWidget()
+        architectureTab = QWidget()
+
+        compositionLayout = QVBoxLayout(compositionTab)
+        self.ui.groupBox_5.setParent(compositionTab)
+        self.ui.groupBox_6.setParent(compositionTab)
+        compositionLayout.addWidget(self.ui.groupBox_5)
+        compositionLayout.addWidget(self.ui.groupBox_6)
+
+        architectureLayout = QVBoxLayout(architectureTab)
+        self.architectureFactorsGroup, self.architectureFactorComboboxes = self.createArchitectureFactorsGroup()
+        self.ui.groupBox_7.setParent(architectureTab)
+        architectureLayout.addWidget(self.architectureFactorsGroup)
+        architectureLayout.addWidget(self.ui.groupBox_7)
+
+        self.clearLayout(self.ui.horizontalLayout_41)
+        self.ui.horizontalLayout_41.addWidget(self.cocomoModelTabs)
+
+        self.cocomoModelTabs.addTab(compositionTab, "COCOMO II (Композиция приложения)")
+        self.cocomoModelTabs.addTab(architectureTab, "COCOMO II (ранняя разработка архитектуры)")
+
+
+    def createArchitectureFactorsGroup(self):
+        factorSources = [
+            self.ui.factorSelectPREC,
+            self.ui.factorSelectFLEX,
+            self.ui.factorSelectRESL,
+            self.ui.factorSelectTEAM,
+            self.ui.factorSelectPMAT,
+        ]
+        factorLabels = ["PREC", "FLEX", "RESL", "TEAM", "PMAT"]
+
+        group = QGroupBox("Факторы показателя степени модели", self.ui.cocomo2)
+        groupLayout = QVBoxLayout(group)
+        comboboxes = []
+
+        for labelText, source in zip(factorLabels, factorSources):
+            rowLayout = QHBoxLayout()
+            label = QLabel(labelText, group)
+            combobox = QComboBox(group)
+
+            for i in range(source.count()):
+                combobox.addItem(source.itemText(i))
+            combobox.setCurrentIndex(source.currentIndex())
+
+            rowLayout.addWidget(label)
+            rowLayout.addWidget(combobox)
+            rowLayout.setStretch(0, 1)
+            rowLayout.setStretch(1, 5)
+            groupLayout.addLayout(rowLayout)
+            comboboxes.append(combobox)
+
+        return group, comboboxes
+
+
+    def clearLayout(self, layout):
+        while layout.count():
+            item = layout.takeAt(0)
+            childLayout = item.layout()
+            childWidget = item.widget()
+            if childLayout is not None:
+                self.clearLayout(childLayout)
+            if childWidget is not None:
+                childWidget.setParent(None)
+
+
+    def setupArchitectureLocInput(self):
+        locLayout = QHBoxLayout()
+        locLabel = QLabel("LOC", self.ui.groupBox_7)
+        self.locArchitectureInput = QSpinBox(self.ui.groupBox_7)
+        self.locArchitectureInput.setMaximum(99999999)
+        self.locArchitectureInput.setValue(2731)
+
+        locLayout.addWidget(locLabel)
+        locLayout.addWidget(self.locArchitectureInput)
+        locLayout.setStretch(0, 1)
+        locLayout.setStretch(1, 1)
+
+        insertIndex = max(self.ui.verticalLayout_16.count() - 1, 0)
+        self.ui.verticalLayout_16.insertLayout(insertIndex, locLayout)
+
+
+    def setupEarlyArchitectureFactorValues(self):
+        multiplier_values = {
+            self.ui.modelSelectPERS: [2.12, 1.62, 1.26, 1.00, 0.83, 0.63, 0.50],
+            self.ui.modelSelectRCPX: [0.49, 0.60, 0.83, 1.00, 1.33, 1.91, 2.72],
+            self.ui.modelSelectRUSE: [0.95, 1.00, 1.07, 1.15, 1.24],
+            self.ui.modelSelectPDIF: [0.87, 1.00, 1.29, 1.81, 2.61],
+            self.ui.modelSelectPREX: [1.59, 1.33, 1.22, 1.00, 0.87, 0.74, 0.62],
+            self.ui.modelSelectFSIL: [1.43, 1.30, 1.10, 1.00, 0.87, 0.73, 0.62],
+            self.ui.modelSelectSCED: [1.43, 1.14, 1.00, 1.00, 1.00],
+        }
+
+        for combobox, values in multiplier_values.items():
+            if combobox.count() < len(values):
+                combobox.insertItem(0, "Сверхнизкий")
+            for i, value in enumerate(values):
+                level = combobox.itemText(i)
+                combobox.setItemText(i, f"{level} ({self.formatFactorValue(value)})")
+
+
+    def formatFactorValue(self, value: float) -> str:
+        formatted = f"{value:.2f}".rstrip("0").rstrip(".")
+        return formatted if "." in formatted else f"{formatted}.0"
+
+
     def earlyArchitectureCocomo2(self):
         # 1. Get data
-        if (self.loc is None): 
-            QMessageBox.warning(self, "Ошибка", "Количество строк кода пока неизвестно")
+        loc = self.locArchitectureInput.value()
+        if loc <= 0:
+            QMessageBox.warning(self, "Ошибка", "Введите LOC больше 0")
             return
         
         parametersDict = {
@@ -39,12 +161,8 @@ class Window(QMainWindow):
                             self.ui.modelSelectPREX.currentIndex(),
                             self.ui.modelSelectFSIL.currentIndex(),
                             self.ui.modelSelectSCED.currentIndex(),],
-            "FACTORS"    : [self.ui.factorSelectPREC.currentIndex(),
-                            self.ui.factorSelectFLEX.currentIndex(),
-                            self.ui.factorSelectRESL.currentIndex(),
-                            self.ui.factorSelectTEAM.currentIndex(),
-                            self.ui.factorSelectPMAT.currentIndex(),],
-            "LOC"        : self.loc,
+            "FACTORS"    : [combobox.currentIndex() for combobox in self.architectureFactorComboboxes],
+            "LOC"        : loc,
         }
 
         salary = self.ui.avgSalaryArchitectureInput.value()
@@ -87,28 +205,31 @@ class Window(QMainWindow):
         self.ui.resultCompositionTable.setItem(0, 0, QTableWidgetItem(str(resultDict["WORK"])))
         self.ui.resultCompositionTable.setItem(0, 1, QTableWidgetItem(str(resultDict["TIME"])))
         self.ui.resultCompositionTable.setItem(0, 2, QTableWidgetItem(str(resultDict["BUDGET"])))
-
+        # self.ui.resultCompositionTable.setItem(0, 3, QTableWidgetItem(str(resultDict["NOP"])))
+        print(f"NOP = {resultDict['NOP']}")
+        
 
     def funcDotsMethod(self):
         # 1. Get data
         productAttributes = self.getPoductAttributes()
-        print(f"1. productAttributes = {productAttributes}")
+        # print(f"1. productAttributes = {productAttributes}")
 
         languagePercents = self.getLanguagePercents()
-        print(f"2. languagePercents = {languagePercents}")
+        # print(f"2. languagePercents = {languagePercents}")
 
         funcDotsTableMatrix = self.getFuncDotsTableMatrix()
         if (funcDotsTableMatrix is None): return
-        print(f"3. funcTableMatrix = \n")
-        [print(row) for row in funcDotsTableMatrix]
+        # print(f"3. funcTableMatrix = \n")
+        # [print(row) for row in funcDotsTableMatrix]
 
         # 2. Calculate
         fp = calculate_fp(funcDotsTableMatrix)
         afp = adjust_fp(fp[-1], productAttributes)
         loc = get_loc_by_fp(afp, languagePercents)
         self.loc = loc
+        self.locArchitectureInput.setValue(loc)
 
-        print(f"4. fp = {fp}; afp = {afp}; loc = {loc}")
+        # print(f"4. fp = {fp}; afp = {afp}; loc = {loc}")
 
         # 3. Show result
         self.ui.resultFuncDotsTable.setItem(0, 0, QTableWidgetItem(str(fp[1])))
