@@ -1,0 +1,4 @@
+src/__pycache__
+src/gui/__pycache__/
+src/logic/__pycache__/
+src/window.py

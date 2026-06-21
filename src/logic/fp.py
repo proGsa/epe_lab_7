@@ -1,6 +1,3 @@
-# Маслова Марина ИУ7-83Б, 2023г
-# https://github.com/MyMiDiII
-
 import numpy as np
 
 
@@ -13,9 +10,9 @@ COEFS = np.array([
     ])
 
 LANGUAGES = np.array([320, 128, 106, 106,
-                      90, 64, 53, 53,
+                      90, 53, 53, 53,
                       49, 32, 34, 18,
-                      21, 54, 13, 56 ])
+                      21, 54, 21, 56 ])
 
 def calculate_fp(func_types_matrix: list[list[int]]) -> tuple[list[int], int]:
     func_types_matrix = np.array(func_types_matrix)
@@ -28,7 +25,6 @@ def calculate_fp(func_types_matrix: list[list[int]]) -> tuple[list[int], int]:
 
 def adjust_fp(fp: int, complexity_ratios: list[int]) -> float:
     vaf = 0.65 + 0.01 * sum(complexity_ratios)
-
     return fp * vaf
 
 def get_loc_by_fp(fp: float, language_percentage: list[float]) -> float:

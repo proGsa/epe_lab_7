@@ -333,7 +333,7 @@
                              <number>99999999</number>
                             </property>
                             <property name="value">
-                             <number>11</number>
+                             <number>3</number>
                             </property>
                            </widget>
                           </item>
@@ -354,7 +354,7 @@
                              <number>99999999</number>
                             </property>
                             <property name="value">
-                             <number>5</number>
+                             <number>4</number>
                             </property>
                            </widget>
                           </item>
@@ -596,6 +596,16 @@
                       <column>
                        <property name="text">
                         <string>Бюджет (руб)</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>NOP</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>P</string>
                        </property>
                       </column>
                      </widget>
@@ -1007,6 +1017,16 @@
                       <column>
                        <property name="text">
                         <string>Бюджет (руб)</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>P</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>EARCH</string>
                        </property>
                       </column>
                      </widget>
@@ -2185,7 +2205,7 @@
                  </item>
                  <item row="1" column="0">
                   <property name="text">
-                   <string>2</string>
+                   <string>3</string>
                   </property>
                  </item>
                  <item row="1" column="1">
@@ -2200,7 +2220,7 @@
                  </item>
                  <item row="2" column="0">
                   <property name="text">
-                   <string>1</string>
+                   <string>0</string>
                   </property>
                  </item>
                  <item row="2" column="1">
